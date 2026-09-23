@@ -1,0 +1,61 @@
+# 機密情報（絶対にコミットしない）
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 機械学習 / データ
+*.pt
+*.pth
+*.onnx
+*.bin
+*.safetensors
+models/
+data/raw/
+*.sqlite3
+*.db
+
+# IDE / エディタ
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ローカルツール設定（機密情報・ローカルパスを含むため除外）
+.roo/mcp.json
+roo-code-settings.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 運用 / ログ
+logs/
+*.log
+tmp/
+temp/
