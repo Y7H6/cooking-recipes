@@ -1,0 +1,25 @@
+# 開発環境のインフラ定義（PostgreSQL のみ）
+# 起動: docker-compose up -d postgres
+#
+# pgvector 拡張対応の pgvector/pgvector:pg16 イメージを使用。
+# 味覚ベクトル（300 次元）の類似度検索に pgvector を利用する（UC-01 以降）。
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: cooking-recipes-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cooking_recipes
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cooking_recipes"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

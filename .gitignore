@@ -39,6 +39,9 @@ data/raw/
 *.sqlite3
 *.db
 
+# Epicure データ（Hugging Face から取得するためリポジトリに含めない）
+backend/data/*.csv
+
 # IDE / エディタ
 .vscode/
 .idea/

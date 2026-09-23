@@ -1,0 +1,2 @@
+# Epicure データ（epicure_core.csv）の配置先。
+# CSV 自体は .gitignore 対象（backend/data/*.csv）。

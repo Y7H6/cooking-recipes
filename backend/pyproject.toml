@@ -1,0 +1,32 @@
+# バックエンド（FastAPI）のプロジェクト定義
+# 依存管理は uv を想定（uv sync / uv run）
+[project]
+name = "cooking-recipes-backend"
+version = "0.1.0"
+description = "味覚AI PoC バックエンド（Epicure × Jev × Qwen）"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy>=2.0",
+    "psycopg[binary]>=3.2",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "httpx>=0.27",
+    "alembic>=1.13",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
