@@ -106,17 +106,17 @@ PostgreSQL（保存・検索）
 
 ---
 
-# **C. 100レシピ自動生成 → 一括評価 → ランキング → レーダー比較**
+# **C. バルク生成（最大10レシピ）→ 一括評価 → ランキング → レーダー比較**
 
 ```
 [ユーザー]
-   │ ①材料セット＋条件入力
+   │ ①材料セット＋条件入力＋生成数（count）入力
    ▼
 [Next.js /recipes/bulk]
    │ ②Qwenバルク生成API呼び出し
    ▼
 [FastAPI /api/recipes/generate_bulk]
-   │ ③Qwen Localで100レシピ生成
+   │ ③Qwen Localで指定数（最大10）のレシピ生成
    ▼
 [PostgreSQL bulk_recipes 保存]
    │
@@ -125,8 +125,8 @@ PostgreSQL（保存・検索）
    │ ④一括評価ボタン押下
    ▼
 [FastAPI /api/recipes/evaluate_bulk]
-   │ ⑤Epicure特徴量抽出（100回）
-   │ ⑥Jev一括判定（100回）
+   │ ⑤Epicure特徴量抽出（バッチ内のレシピ数分）
+   │ ⑥Jev一括判定（バッチ内のレシピ数分）
    ▼
 [PostgreSQL taste_scores 保存]
    │
@@ -183,7 +183,7 @@ Next.js UI
   ├── レシピ検索 → レーダーチャート表示
   ├── レシピ編集 → Jev評価 → 保存
   ├── Qwen補助生成 → 編集 → 比較
-  ├── 100レシピ生成 → 一括評価 → ランキング → 比較
+  ├── バルク生成（最大10レシピ）→ 一括評価 → ランキング → 比較
   ▼
 FastAPI
   │

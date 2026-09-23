@@ -10,7 +10,7 @@ Next.js + FastAPI + PostgreSQL
   - 既存レシピ検索・選択・編集
   - 材料追加・削除・分量変更フォーム
   - Qwen補助レシピ生成・編集
-  - 100レシピ自動生成ダッシュボード
+  - 最大10レシピ自動生成ダッシュボード（生成数はユーザーが指定）
   - 味スコア・レーダーチャート表示
 
 - **バックエンド：FastAPI**
@@ -78,11 +78,11 @@ app/
 
 - **jev_client**
   - 単発判定：1レシピ → 味スコア
-  - 一括判定：100レシピ → 味スコア配列
+  - 一括判定：バッチ内のレシピ数（最大10） → 味スコア配列
 
 - **qwen_client**
   - 単発生成：材料＋条件 → レシピ案
-  - バルク生成：材料＋条件 → 100レシピ案
+  - バルク生成：材料＋条件 → ユーザー指定数（最大10）のレシピ案
 
 - **recipe_service**
   - 既存レシピ検索・取得
@@ -91,7 +91,7 @@ app/
 
 - **bulk_service**
   - バッチID発行
-  - 100レシピ生成＋保存
+  - ユーザー指定数（最大10）のレシピ生成＋保存
   - 一括JeV判定＋スコア保存
 
 - **chart_service**
@@ -118,7 +118,7 @@ app/
   - Qwen補助レシピ生成（編集可能モード）
 
 - **`POST /api/recipes/generate_bulk`**
-  - 材料＋条件 → Qwenで100レシピ生成 → バッチID返却
+  - 材料＋条件 + `count`（1〜10, デフォルト1）→ Qwenで指定数生成 → バッチID返却
 
 - **`POST /api/recipes/evaluate_bulk`**
   - バッチID指定 → Jev一括判定 → スコア保存
@@ -174,12 +174,12 @@ app/
 4. 編集後を `POST /api/recipes/evaluate`  
 5. レーダーチャートで味の変化表示
 
-### ③ 100レシピ自動生成＋一括判定＋ランキング
+### ③ バルク生成＋一括判定＋ランキング（ユーザー指定数、最大10）
 
-1. 材料＋条件入力  
-2. `POST /api/recipes/generate_bulk` → バッチID  
-3. `POST /api/recipes/evaluate_bulk` → Jev一括判定  
-4. `GET /api/recipes/bulk/{batch_id}/ranking` → ランキング  
-5. `GET /api/charts/radar` →代表レシピの味分布表示
+1. 材料＋条件＋生成数（count）入力
+2. `POST /api/recipes/generate_bulk` → バッチID
+3. `POST /api/recipes/evaluate_bulk` → Jev一括判定
+4. `GET /api/recipes/bulk/{batch_id}/ranking` → ランキング
+5. `GET /api/charts/radar` → 代表レシピの味分布表示
 
 ---

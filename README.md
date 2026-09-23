@@ -36,7 +36,7 @@ LLM の「評価が毎回変わる・根拠が曖昧」という弱点を、以�
 | UC-03 | レシピ評価 | 材料＋作り方 → 味スコア＋信頼度の算出 |
 | UC-04 | レシピ編集 | 材料追加・削除・分量変更 → 自動再評価 |
 | UC-05 | Qwen 補助レシピ生成 | 材料・制約条件からレシピ案を生成 |
-| UC-06 | バルク生成 | 100 レシピの自動生成 |
+| UC-06 | バルク生成 | ユーザー指定数（最大10）のレシピ自動生成 |
 | UC-07 | 一括評価 | 生成レシピの一括味スコア評価 |
 | UC-08 | ランキング | 評価結果によるランキング表示 |
 | UC-09 | 味比較 | 複数レシピの味をレーダーチャートで比較 |
@@ -159,11 +159,15 @@ npm run dev
 
 | カテゴリ | ファイル |
 |----------|----------|
-| 企画書 | [docs/proposal/](docs/proposal/) |
-| 技術アーキテクチャ | [technical-architecture.md](technical-architecture.md) |
-| API 仕様 | [api-spec-details.md](api-spec-details.md) |
-| UX 設計 | [docs/ux/](docs/ux/) |
-| Epicure ライセンス | [epicure.md](epicure.md) |
+| docs 目次 | [docs/README.md](docs/README.md) |
+| 企画書 | [proposal/proposal.md](docs/proposal/proposal.md) |
+| 経営企画書 | [business-proposal.md](docs/proposal/business-proposal.md) |
+| 技術アーキテクチャ | [technical-architecture.md](docs/architecture/technical-architecture.md) |
+| データフロー図 | [data-flow-graph.md](docs/architecture/data-flow-graph.md) |
+| API 仕様 | [api-spec-details.md](docs/api/api-spec-details.md) |
+| UX 設計 | [ui-design.md](docs/ux/ui-design.md) |
+| ページ遷移図 | [page-transition-chart.md](docs/ux/page-transition-chart.md) |
+| Epicure ライセンス | [epicure-license.md](docs/proposal/epicure-license.md) |
 
 ---
 
@@ -176,7 +180,7 @@ Epicure ingredient embeddings © 2026 Jakub Radzikowski & Josef Chen (KAIKAKU.AI
 Licensed under CC BY 4.0. https://creativecommons.org/licenses/by/4.0/
 ```
 
-詳細は [`epicure.md`](epicure.md) を参照してください。
+詳細は [`epicure-license.md`](docs/proposal/epicure-license.md) を参照してください。
 
 ---
 

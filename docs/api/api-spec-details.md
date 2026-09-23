@@ -182,12 +182,12 @@
 
 ---
 
-# **E. 100レシピ自動生成（バルク生成）**
+# **E. バルク生成（ユーザー指定数のレシピ自動生成）**
 
 ---
 
 ## **6. POST /api/recipes/generate_bulk**
-材料＋条件 → Qwen が 100レシピ生成。
+材料＋条件 → Qwen がユーザー指定数（最大10）のレシピを生成。
 
 ### Request
 ```json
@@ -196,26 +196,33 @@
   "constraints": {
     "style": "和食",
     "variation": "high"
-  }
+  },
+  "count": 5
 }
 ```
+
+| パラメータ | 型 | 必須 | 説明 |
+|-----------|------|------|------|
+| `ingredients` | string[] | はい | 食材名リスト |
+| `constraints` | object | いいえ | 制約条件（style, variation など） |
+| `count` | int | いいえ | 生成数（1〜10, デフォルト: 1） |
 
 ### Response
 ```json
 {
   "batch_id": "bulk_20260923_001",
-  "count": 100
+  "count": 5
 }
 ```
 
 ---
 
-# **F. 100レシピ一括評価（Jev）**
+# **F. バルク評価（Jev）**
 
 ---
 
 ## **7. POST /api/recipes/evaluate_bulk**
-100レシピを Jev で一括判定。
+バッチに属するレシピを Jev で一括判定。
 
 ### Request
 ```json
