@@ -27,6 +27,7 @@ Next.js + FastAPI + PostgreSQL
   - 食材マスタ（Epicure ID紐付け）
   - バルク生成バッチ情報
   - レシピ編集履歴
+  - お気に入りフラグ・コメント（検索性向上）
 
 ---
 
@@ -83,6 +84,8 @@ app/
 - **qwen_client**
   - 単発生成：材料＋条件 → レシピ案
   - バルク生成：材料＋条件 → ユーザー指定数（最大10）のレシピ案
+  - **構造化出力**：Ollama の `format` パラメータ（JSON Schema）でスキーマ制約付き生成を行い、Pydantic で検証
+  - **リトライ機構**：検証失敗時は最大3回まで再生成（エラー内容をプロンプトに反映）、それでも失敗時は 502 を返却
 
 - **recipe_service**
   - 既存レシピ検索・取得
@@ -129,6 +132,15 @@ app/
 - **`GET /api/charts/radar`**
   - 指定レシピID群 → レーダーチャート用データ
 
+- **`PATCH /api/recipes/{id}/favorite`**
+  - レシピのお気に入りフラグON/OFF切替
+
+- **`PUT /api/recipes/{id}/comment`**
+  - レシピにコメント登録・更新（1レシピ1件、最大500文字、空文字で削除）
+
+- **`GET /api/recipes/search`（拡張）**
+  - キーワード検索にコメント本文を追加、`favorite_only` フィルタ対応
+
 ---
 
 ## 5. データモデル（簡略）
@@ -137,7 +149,7 @@ app/
   - `id`, `name`, `epicure_id`, `category`
 
 - **recipes**
-  - `id`, `title`, `body`, `source(user/qwen)`, `base_recipe_id`
+  - `id`, `title`, `body`, `source(user/qwen)`, `base_recipe_id`, `is_favorite`, `comment`, `comment_updated_at`
 
 - **recipe_ingredients**
   - `id`, `recipe_id`, `ingredient_id`, `amount`
@@ -181,5 +193,13 @@ app/
 3. `POST /api/recipes/evaluate_bulk` → Jev一括判定
 4. `GET /api/recipes/bulk/{batch_id}/ranking` → ランキング
 5. `GET /api/charts/radar` → 代表レシピの味分布表示
+
+### ④ お気に入り・コメント（検索性向上）
+
+1. レシピ詳細画面またはバルク生成ダッシュボードで「お気に入り」切替
+2. `PATCH /api/recipes/{id}/favorite` → `recipes.is_favorite` 更新
+3. コメント入力 → `PUT /api/recipes/{id}/comment` → `recipes.comment` 更新（1レシピ1件）
+4. 検索画面で `GET /api/recipes/search?keyword=...&favorite_only=true`
+5. キーワードはレシピ名・材料名・コメント本文を部分一致検索 → 該当レシピ一覧表示
 
 ---

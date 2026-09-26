@@ -96,14 +96,28 @@ cooking-recipes/
 docker-compose up -d postgres
 ```
 
-### 2. バックエンドのセットアップ
+### 2. バックエンドのセットアップ（uv 使用）
+
+> **注意**: `requirements.txt` は使用しません。依存管理は `pyproject.toml` + `uv` で統一されています。
+
+#### uv のインストール（未インストールの場合）
+
+```bash
+# pip を使用する場合
+pip install uv
+
+# または公式インストーラー（推奨）
+# https://docs.astral.sh/uv/getting-started/installation/
+```
+
+#### 依存のインストール
 
 ```bash
 cd backend
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+uv sync
 ```
+
+> **補足**: `uv sync` は `pyproject.toml` に記載された依存関係を自動的にインストールします。
 
 ### 3. Epicure CSV の取得
 
@@ -133,11 +147,18 @@ cp .env.example .env
 ```bash
 # バックエンド（別ターミナル）
 cd backend
-uvicorn app.main:app --reload
+uv run uvicorn app.main:app --reload
 
 # フロントエンド（別ターミナル）
 cd frontend
 npm run dev
+```
+
+### 7. テスト実行（オプション）
+
+```bash
+cd backend
+uv run pytest tests/
 ```
 
 ---

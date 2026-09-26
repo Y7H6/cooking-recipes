@@ -276,6 +276,8 @@ Licensed under CC BY 4.0. https://creativecommons.org/licenses/by/4.0/
 | POST | `/api/recipes/evaluate_bulk` | バッチに属するレシピを Jev で一括判定 | [WIP] |
 | GET | `/api/recipes/bulk/{batch_id}/ranking` | ランキング取得 | [WIP] |
 | GET | `/api/charts/radar` | レーダーチャート用データ取得 | [WIP] |
+| PATCH | `/api/recipes/{id}/favorite` | お気に入りフラグON/OFF切替 | [WIP] |
+| PUT | `/api/recipes/{id}/comment` | コメント登録・更新（1レシピ1件、最大500文字） | [WIP] |
 
 詳細は [`docs/api/api-spec-details.md`](docs/api/api-spec-details.md) を参照。
 
@@ -297,6 +299,7 @@ Licensed under CC BY 4.0. https://creativecommons.org/licenses/by/4.0/
 | UC-10 | 改善ループ最適化 | 生成レシピの評価 → 改善提案 → 再評価 |
 | UC-11 | 食材マスタ取り込み | Epicure CSV からの食材データインポート |
 | UC-12 | 編集履歴記録 | レシピ編集の差分履歴を保存 |
+| UC-13 | お気に入り・コメント | お気に入りフラグ切替・コメント登録（1レシピ1件）、コメントキーワード検索・お気に入りフィルタ |
 
 ---
 

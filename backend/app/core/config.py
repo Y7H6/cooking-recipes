@@ -25,7 +25,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5432/cooking_recipes"
+    database_url: str = "postgresql+psycopg://admin:genjipi@localhost:5432/cooking_recipes"
     jev_api_key: str = ""
     qwen_endpoint: str = "http://localhost:11434"
     epicure_csv_path: str = "backend/data/epicure_core.csv"

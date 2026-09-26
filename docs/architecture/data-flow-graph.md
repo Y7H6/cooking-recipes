@@ -1,14 +1,4 @@
-保史さん、了解。  
-ここでは **追加機能すべてを含めた「データフロー図（DFD）＝7」** を、  
-あなたの味覚AIプラットフォームの **完全仕様レベル**でまとめます。
-
-今回の内容はあなたのシステム仕様に基づくため、  
-Edge の現在タブ（画面遷移 英語検索）は **非関連**と判断し、  
-**edge_get_page_content は使用しません**。
-
----
-
-# ⭐ **7. データフロー図（DFD：完全版）**  
+# **7. データフロー図（DFD：完全版）**  
 Epicure × Jev × Qwen × Next.js × FastAPI × PostgreSQL  
 ＋追加機能（レシピ保存・検索・レーダーチャート比較）
 
@@ -156,7 +146,38 @@ PostgreSQL（保存・検索）
 
 ---
 
-# **E. データフローの役割（追加要件対応）**
+# **E. お気に入り・コメント（検索性向上）**
+
+```
+[ユーザー]
+   │ ①レシピ詳細画面またはバルク生成ダッシュボードで「お気に入り」切替・コメント入力
+   ▼
+[Next.js /recipes/edit/[id] または /recipes/bulk]
+   │ ②PATCH /api/recipes/{id}/favorite
+   │ ③PUT /api/recipes/{id}/comment（1レシピ1件、最大500文字）
+   ▼
+[FastAPI routers/recipes.py]
+   │ ④recipes.is_favorite / recipes.comment を更新
+   ▼
+[PostgreSQL recipes]
+   │
+   ▼
+[ユーザー]
+   │ ⑤検索画面でキーワード入力＋「お気に入りのみ」フィルタ
+   ▼
+[FastAPI /api/recipes/search?keyword=...&favorite_only=true]
+   │ ⑥レシピ名・材料名・コメント本文を部分一致検索
+   ▼
+[PostgreSQL recipes + recipe_ingredients]
+   │
+   ▼
+[Next.js /recipes/search]
+   │ ⑦お気に入りバッジ・コメント付きレシピ一覧表示
+```
+
+---
+
+# **F. データフローの役割（追加要件対応）**
 
 ### ✔ 保存したレシピは検索画面でレーダーチャート付きで表示  
 → PostgreSQL → FastAPI → Next.js の流れで実現
@@ -167,12 +188,15 @@ PostgreSQL（保存・検索）
 ### ✔ 編集（追加・削除・分量変更）による味の変化を即時反映  
 → Epicure → Jev → レーダーチャート
 
-### ✔ 100レシピ自動生成の味覚分布を比較  
+### ✔ バルク生成（最大10レシピ）の味覚分布を比較  
 → バッチID → 一括評価 → ランキング → レーダー比較
+
+### ✔ お気に入り・コメントでシミュレーション済みレシピを検索性向上  
+→ `PATCH /api/recipes/{id}/favorite` / `PUT /api/recipes/{id}/comment` → 検索API（コメント検索・お気に入りフィルタ）
 
 ---
 
-# **F. 全体統合版 DFD（最終図）**
+# **G. 全体統合版 DFD（最終図）**
 
 ```
 ユーザー
@@ -184,6 +208,7 @@ Next.js UI
   ├── レシピ編集 → Jev評価 → 保存
   ├── Qwen補助生成 → 編集 → 比較
   ├── バルク生成（最大10レシピ）→ 一括評価 → ランキング → 比較
+  ├── お気に入り切替・コメント登録 → 検索（コメント検索・お気に入りフィルタ）
   ▼
 FastAPI
   │
@@ -194,9 +219,9 @@ FastAPI
   ├── chart_service（レーダー整形）
   ▼
 PostgreSQL
-  │
-  ├── recipes
-  ├── recipe_ingredients
+   │
+   ├── recipes（is_favorite / comment 含む）
+   ├── recipe_ingredients
   ├── taste_scores
   ├── bulk_batches
   ├── bulk_recipes
@@ -205,7 +230,7 @@ PostgreSQL
 
 ---
 
-# ⭐ **これで「味覚AIプラットフォーム」の全体像が完全に固まりました。**
+**これで「味覚AIプラットフォーム」の全体像が完全に固まりました。**
 
 - UX（画面遷移）  
 - API仕様  
